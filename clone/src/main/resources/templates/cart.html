@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Your Cart</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background: #f3f3f3; }
+        .navbar { background: #131921; padding: 10px 20px; display: flex; align-items: center; gap: 20px; }
+        .logo { color: white; font-size: 24px; font-weight: bold; }
+        .logo span { color: #ff9900; }
+        .nav-links a { color: white; text-decoration: none; font-size: 13px; }
+        .page { max-width: 900px; margin: 30px auto; padding: 0 20px; }
+        h2 { font-size: 24px; margin-bottom: 20px; }
+        .cart-item { background: white; border: 1px solid #ddd; border-radius: 4px; padding: 15px; margin-bottom: 15px; display: flex; align-items: center; gap: 20px; }
+        .cart-item img { width: 80px; height: 80px; object-fit: contain; }
+        .cart-item-info { flex: 1; }
+        .cart-item-info h3 { font-size: 16px; margin-bottom: 5px; }
+        .cart-item-info p { color: #B12704; font-weight: bold; font-size: 18px; }
+        .qty { color: #555; font-size: 13px; margin-top: 4px; }
+        .remove-btn { background: none; border: 1px solid #aaa; padding: 6px 12px; border-radius: 3px; cursor: pointer; font-size: 13px; }
+        .total-box { background: white; border: 1px solid #ddd; border-radius: 4px; padding: 20px; text-align: right; font-size: 18px; margin-top: 15px; }
+        .total-box strong { color: #B12704; font-size: 22px; }
+        .checkout-btn { margin-top: 15px; padding: 12px 30px; background: #ff9900; border: none; border-radius: 20px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .empty { text-align: center; padding: 50px; color: #555; font-size: 18px; }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <div class="logo">ama<span>z</span>on</div>
+    <div style="flex:1"></div>
+    <div class="nav-links"><a href="/products">Back to Products</a>&nbsp;&nbsp;</div>
+    <div class="nav-links"><a href="/logout">Logout</a></div>
+</div>
+<div class="page">
+    <h2>Your Cart</h2>
+    <div th:if="${#lists.isEmpty(cartItems)}" class="empty">
+        <p>Your cart is empty!</p>
+        <br/>
+        <a href="/products" style="color:#0066c0;">Go back to products</a>
+    </div>
+    <div th:unless="${#lists.isEmpty(cartItems)}">
+        <div class="cart-item" th:each="item : ${cartItems}">
+            <img th:src="${item.product.imageUrl}" alt="product"/>
+            <div class="cart-item-info">
+                <h3 th:text="${item.product.name}"></h3>
+                <p th:text="'$' + ${item.product.price}"></p>
+                <div class="qty" th:text="'Qty: ' + ${item.quantity}"></div>
+            </div>
+            <a th:href="@{/cart/remove/{id}(id=${item.id})}">
+                <button class="remove-btn">Remove</button>
+            </a>
+        </div>
+        <div class="total-box">
+            Total: <strong th:text="'$' + ${total}"></strong>
+            <br/><br/>
+            <button class="checkout-btn">Proceed to Checkout</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
